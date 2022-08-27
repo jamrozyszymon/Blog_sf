@@ -1,10 +1,7 @@
 {% extends "base.html.twig" %}
  {% block body %}
-    <div class="container">
-        <div class= "row">
-            <div class = "col-6">
-
-                <h1> Kategoria Nazwa {# TODO #} </h1>
+            <div>
+                <h1> {{ app.request.get('categoryname')|capitalize|replace({'-': ' ',}) }}</h1>
 
                 <div>
                     {% include 'displayerror.html.twig' %}
@@ -40,8 +37,6 @@
             </table>
 
             </div>
-        </div>
-    </div>
 
     <div class="navigation">
         {{ knp_pagination_render(paginations)}}

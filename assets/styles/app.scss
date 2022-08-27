@@ -1,67 +1,22 @@
 @import '~bootstrap/scss/bootstrap';
 
-
-body{
-    margin-right: auto;
-    position: relative;
-    min-height: 100vh;
-}
-//header
-header{
-    background-color: rgb(8, 5, 48);
-    color: #fff;
-    padding: 20px;
-    display: flex;
+.navbar-brand {
+    font-size: 40px;
+    font-weight: 500;
+    color:#fff;
 }
 
-.header_title {
-    width: 40%;
-}
-
-.header_nav {
-     width: 60%;
-     float: right;
-}
-
-.main_title {
+.nav-link {
     text-decoration: none;
+    color:darkgray;
+    font-size: 20px;
 }
-
-//main {
-main {
-    display:flex;
-    margin: 20px;
-}
-
-nav {
-    width: 20%;
-}
-
-article {
-    line-height: 24px;
-    min-height: calc(100vh - 90px - 60px);
-    width: 80%;
-    margin-left: 20px;
-}
-
-.nav-item {
-    list-style-type: none;
-}
-.nav.flex-column {
-    width: 25%;
-}
-
-.btn.btn-secondary {
-    margin-top: 20px;
-}
-
 
 //footer
 footer {
-    background-color: rgb(8, 5, 48);
+    background-color: rgb(77, 71, 160);
     color: #fff;
     text-align: center;
     padding: 10px;
-    position: absolute;
     width: 100%;
 }

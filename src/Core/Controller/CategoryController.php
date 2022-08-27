@@ -2,18 +2,18 @@
 
 namespace App\Core\Controller;
 
-use App\Core\Services\DisplayCategory;
-use App\Core\Services\GetCategories;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Category;
-use App\Repository\PostRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
+    /**
+     * Display list of category
+     */
     public function displayCategories(ManagerRegistry $doctrine)
     {
         $categories = $doctrine->getRepository(Category::class)->findAll();
@@ -31,8 +31,7 @@ class CategoryController extends AbstractController
     {
         $categories = $doctrine->getRepository(Category::class)->findAll();
 
-        $paginate = $paginator->paginate(
-            //$this->categories,
+        $category = $paginator->paginate(
             $categories,
             $request->query->getInt('page', 1), 5
         );
@@ -43,7 +42,20 @@ class CategoryController extends AbstractController
             );
         }
         return $this->render('Category/display.html.twig', [
-            'paginations' => $paginate
+            'categories' => $category
+        ]);
+    }
+
+    /**
+     * @Route("/Category/display/{!page?1}", name="category_search_display")
+     */
+    public function showSearchCategory(ManagerRegistry $doctrine, $page, Request $request)
+    {
+        $category = $doctrine->getRepository(Category::class)
+            ->findCategory($page, $request->get('searchby'));
+
+        return $this->render('Category/display.html.twig', [
+            'categories' => $category
         ]);
     }
 

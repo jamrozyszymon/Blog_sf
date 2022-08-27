@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 
 /**
  * @extends ServiceEntityRepository<Category>
@@ -16,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private PaginatorInterface $paginator)
     {
         parent::__construct($registry, Category::class);
     }
@@ -37,6 +39,30 @@ class CategoryRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+
+    /**
+     * Find category by searching
+     * @param $page pagination
+     * @param string $searchCategory Phrase from searching.
+     */
+    public function findCategory($page, string $searchCategory): PaginationInterface
+    {
+        $searchCategoryExplode = explode(" ",$searchCategory);
+
+        $qb = $this->createQueryBuilder('c');
+
+            foreach($searchCategoryExplode as $key => $value) {
+                $qb->andWhere('c.name LIKE :val'.$key)
+                ->setParameter('val'.$key, '%'.$value.'%');
+            }
+
+        $qb->orderBy('c.name', 'ASC')
+            ->getQuery();
+
+        $pagination = $this->paginator->paginate($qb, $page, 12);
+        return $pagination;
     }
 
 //    /**

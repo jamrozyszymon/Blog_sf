@@ -1,12 +1,17 @@
 {% extends "base.html.twig" %}
- {% block body %}
-    <div class="container">
-        <div class= "row">
-            <div class = "col-6">
-                <div>
-                    {% include 'displayerror.html.twig' %}
-                </div>
-            <h2> Kategorie </h2>
+{% block body %}
+    <div>
+        {% include 'displayerror.html.twig' %}
+    </div>
+        {% if app.request.get('searchby')%} 
+            {% if categories is empty %}
+                <h2>Brak wyników dla: {{app.request.query.get('searchby')}}</h2>
+            {% else %}
+                <h2>Wyniki wyszukiwania dla: {{app.request.query.get('searchby')}}</h2>
+            {% endif %}
+        {% else %}
+            <h2> Wszystkie kategorie </h2>
+        {% endif %}
             <table class="table">
                 <thead>
                     <tr>
@@ -21,21 +26,21 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    {% for pagination in paginations %}
+                    {% for category in categories %}
                     <tr>
                     <th scope="row"></th>
                         {% if is_granted('ROLE_ADMIN') %}
                         <td>
-                            {{ pagination.id }}
+                            {{ category.id }}
                         </td>
                         {% endif %}
                         <td>
-                            {{ pagination.name }}
+                            {{ category.name }}
                         </td>
 
                         {% if is_granted('ROLE_ADMIN') %}
                         <td> 
-                            <a onclick="return confirm('Czy na pewno usunąć categorię?')" href ="{{ path('admin_category_delete',{'id':pagination.id})}}"><span class="close">X</span></a>
+                            <a onclick="return confirm('Czy na pewno usunąć kategorię?')" href ="{{ path('admin_category_delete',{'id':category.id})}}"><span class="close">X</span></a>
                         </td>
                         {% endif %}
                         
@@ -43,13 +48,8 @@
                     {% endfor %}
                 </tbody>
             </table>
-
-            </div>
-        </div>
-    </div>
-
     <div class="navigation">
-        {{ knp_pagination_render(paginations)}}
+        {{ knp_pagination_render(categories)}}
     </div>
 
  {% endblock %}
