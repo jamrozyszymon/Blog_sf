@@ -5,7 +5,9 @@ namespace App\Core\Services;
 use App\Core\ValueObject\UserValueObject;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Exception;
 
 class CreateUser
 {
@@ -21,6 +23,9 @@ class CreateUser
         $this->userPasswordHasherInterface = $userPasswordHasherInterface;
     }
 
+    /**
+     * Create user with validation of duplicate login od e-mail in Database
+     */
     public function create(UserValueObject $userValueObject): void
     {
         $user = new User();
@@ -30,6 +35,23 @@ class CreateUser
         $user->setRoles($userValueObject->roles ?? []);
         $user->setPassword($passwordHashed);
         $this->entityManagerInterface->persist($user);
-        $this->entityManagerInterface->flush();
+
+        /**
+         * check duplication login or email by key's value from UniqueConstraintViolationException
+         */
+        try {
+            $this->entityManagerInterface->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            if (is_int(strpos($e->getPrevious()->getMessage(), 'UNIQ_8D93D6495E237E06'))) {
+                throw new Exception('Podany login jest już zajęty.');
+            } else {
+                throw new Exception('Istnieje już konto przypisane do tego e-maila.');
+            }
+        }
+
     }
+
 }
+
+//'user.UNIQ_8D93D6495E237E06'
+//'user.UNIQ_8D93D649E7927C74'

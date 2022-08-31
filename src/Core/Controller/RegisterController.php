@@ -7,6 +7,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Core\Services\RegisterUser;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 
 class RegisterController extends AbstractController
@@ -25,6 +26,7 @@ class RegisterController extends AbstractController
             } catch (Exception $e) {
                 $this->addFlash('danger', $e->getMessage());
             }
+
         }
         return $this->render('User/registration.html.twig');
     }

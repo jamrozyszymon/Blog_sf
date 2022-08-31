@@ -1,45 +1,74 @@
 {% extends "base.html.twig" %}
- {% block body %}
-            <div>
+    {% block bodyheader %}
                 <h1> {{ app.request.get('categoryname')|capitalize|replace({'-': ' ',}) }}</h1>
+    {% endblock %}
+    {% block bodycontent %}
+        {% for post in posts %}
+            <div class="card mb-2">
+                <div class="row">
+                    <div class="card-user col-2">
+                        <div class="name mb-1">
+                            {{post.getUsers}}
+                        </div>
+                        <div align="avatar center">
+                            {# TODO #}
+                            {# <img class="img-fluid" src="{{ asset('build/images/' ~ user.getImagesFileName) }}"></img> #}
+                            <img class="img-fluid" src="{{ asset('build/images/avatar_1.png') }}"></img>
+                        </div>
+                    </div>
 
-                <div>
-                    {% include 'displayerror.html.twig' %}
+                    <div class="card-content col-10">
+                        <div class="date mt-1">
+                            Opublikowano {{ post.getCreatedDate|date("m/d/Y H:i")}}
+
+                            {# Delete post by admin#}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                
+                                <a onclick="return confirm('Czy na pewno usunąć post?')" href ="{{ path('post_delete',{'id':post.id})}}">
+                                <button type="button" class="btn btn-danger">Usuń</button>
+                                </a>
+                      
+                           {% endif %}
+
+                        </div>
+                        <div class="card-content-content my-1">
+                            {{ post.content}}
+                        </div>
+                        <div class="card-content-opinion mb-1">
+                            <button class="btn">
+                                <img src="{{ asset('build/images/hand-thumbs-down-fill.svg')}}" alt="Negatyw" width="32" height="32">
+                            </button>
+                             <button class="btn">
+                                <img src="{{ asset('build/images/hand-thumbs-up-fill.svg')}}" alt="Negatyw" width="32" height="32">
+                            </button>
+                        </div>
+       
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="navigation">
+            {{ knp_pagination_render(posts)}}
+        </div>
+
+        {% if app.user %}
+                <div class="card mt-2 border border-info">
+                    <div class="row">
+                        <div class="col-2">
+                        {# TODO #}
+                            Dodaj załącznik
+                        </div>
+                        <div class="col-10">
+                        {{ form_start(form) }}
+                            <h5 class="my-2">Dodaj post</h>
+                                {{ form_widget(form.content)}}
+                                <button type="submit" class="btn btn-info my-2">Dodaj</button>
+                        {{ form_end(form) }}
+                        </div>
+                    </div>
                 </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Treść</th>
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <th scope="col">Usuń</th>
-                        {% endif %}
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    {% for pagination in paginations %}
-                    <tr>
-                    <th scope="row"></th>
-                        <td>
-                            {{ pagination.content }}
-                        </td>
+        {% endif %}
 
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <td> 
-                            <a onclick="return confirm('Czy na pewno usunąć post?')" href ="{{ path('post_delete',{'id':pagination.id})}}"><span class="close">X</span></a>
-                        </td>
-                        {% endif %}
-                        
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            </div>
-
-    <div class="navigation">
-        {{ knp_pagination_render(paginations)}}
-    </div>
-
- {% endblock %}
+    {% endblock %}

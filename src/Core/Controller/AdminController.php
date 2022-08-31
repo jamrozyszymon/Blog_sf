@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Category;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Entity\Post;
 
 /**
  * @Route("/admin")
@@ -90,4 +91,5 @@ class AdminController extends AbstractController
         $entityManagerInterface->flush();
         return $this->redirectToRoute('admin_user_display');
     }
+
 }

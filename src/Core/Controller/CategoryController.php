@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractController
 {
     /**
-     * Display list of category
+     * Display list of category in nav
      */
     public function displayCategories(ManagerRegistry $doctrine)
     {

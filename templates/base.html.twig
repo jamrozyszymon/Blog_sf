@@ -22,15 +22,21 @@
             <div class="container mt-5">
                 <div class="row">
                     <nav class="col-sm-12 col-md-3 col-lg-2 mb-5">
-                            {% block nav %}
-                                    {{ render(controller("App\\Core\\Controller\\CategoryController::displayCategories")) }}
-                            {% endblock %}
+                        {% block nav %}
+                            {{ render(controller("App\\Core\\Controller\\CategoryController::displayCategories")) }}
+                        {% endblock %}
                     </nav>
 
                     <article class="col-sm-12 col-md-9 col-lg-8 mb-5">
                         {% block body %}
-
-
+                            <div class="body-header mb-5">
+                                {% block bodyheader %}
+                                {% endblock %}
+                            </div>
+                            <div class="body-article">
+                                {% block bodycontent %}
+                                {% endblock %}
+                            </div>
                         {% endblock %}
                     </article>
 

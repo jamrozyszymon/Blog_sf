@@ -8,9 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\UserRepository::class)
+ * @UniqueEntity(fields= {"name"})
+ * @UniqueEntity(fields= {"email"})
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -22,13 +25,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
-     * @Assert\NotBlank(message = "Wprowadź poprawny nick.")
-     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
     /**
-     * @Assert\NotBlank(message = "Wprowadź poprawny email.")
+     * @Assert\NotBlank()
      * @Assert\Email()
      * @ORM\Column(type="string", length=180, unique=true)
      */
@@ -41,13 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var string The hashed password
-     * @Assert\NotBlank(message = "Hasło nie może być puste.")
-     * @Assert\Length(
-     * min=8,
-     * max=16,
-     * minMessage = "Hasło musi zawierać conajmniej 8 znaków",
-     * maxMessage = "Hasło może zawierać maksymalnie 16 znaków"
-     * )
+     * @Assert\NotBlank()
      * @ORM\Column(type="string")
      */
     private $password;
@@ -172,6 +169,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
 }

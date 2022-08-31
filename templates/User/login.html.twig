@@ -26,6 +26,8 @@
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
         </form>
+        <div class="card">
         <h3>Nie posiadasz konta</h3>
             <a href= "{{path('register')}}">Zarejestruj się</a>
+        </div>
 {% endblock %}
