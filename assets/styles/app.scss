@@ -54,3 +54,17 @@ footer {
         font-size: 15px;
     }
 }
+
+//opinion - hide all button at the beginning
+.click-to-negative {
+    display: none;
+}
+.click-to-back-negative {
+    display: none;
+}
+.click-to-positive {
+    display: none;
+}
+.click-to-back-positive {
+    display: none;
+}

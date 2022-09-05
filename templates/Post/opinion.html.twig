@@ -1,0 +1,72 @@
+{% block opinion %}
+
+	{% if app.user %}
+
+		{% if post in app.user.getNegativeOpinion %}
+			{% set userNegativePost = 'userNegativePost' %}
+		{% elseif post in app.user.getPositiveOpinion %}
+			{% set userPositivePost = 'userPositivePost' %}
+		{% else %}
+			{% set noAction = 'noAction' %}
+		{% endif %}
+
+		<button data-toggle="tooltip" class="btn position-relative click-to-negative {{noAction|default(null)}} post-id-{{post.id}}" title="Oceń ten post negatywnie" data-placement="bottom">
+			<i href="{{path('negative_post',{'post':post.id})}}" class="toogle-opinion">
+				<img src="{{ asset('build/images/hand-thumbs-down-fill.svg')}}" alt="Negatyw" width="32" height="32">
+			</i>
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger num-negative-{{post.id}}">
+				{{ post.usersNegative.count}}
+			</span>
+		</button>
+
+		<button data-toggle="tooltip" class="btn position-relative btn-danger click-to-back-negative {{userNegativePost|default(null)}} negative-id-{{post.id}}" title="Twoja ocena jest negatywna. Zmiana? Naciśnij." data-placement="bottom">
+			<a href="{{path('back_negative_post',{'post':post.id})}}" class="toogle-opinion">
+				<img src="{{ asset('build/images/hand-thumbs-down-fill.svg')}}" alt="Negatyw" width="32" height="32">
+			</a>
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger num-negative-{{post.id}}">
+				{{ post.usersNegative.count}}
+			</span>
+		</button>
+
+		<button data-toggle="tooltip" class="btn position-relative click-to-positive {{noAction|default(null)}} post-id-{{post.id}}" title="Oceń ten post pozytywnie" data-placement="bottom">
+			<a href="{{path('positive_post',{'post':post.id})}}" class="toogle-opinion">
+				<img src="{{ asset('build/images/hand-thumbs-up-fill.svg')}}" alt="Positive" width="32" height="32">
+
+			</a>
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success num-positive-{{post.id}}">
+				{{ post.usersPositive.count}}
+			</span>
+		</button>
+
+		<button data-toggle="tooltip" class="btn position-relative btn-success click-to-back-positive {{userPositivePost|default(null)}} positive-id-{{post.id}}" title="Twoja ocena jest pozytywna. Zmiana? Naciśnij." data-placement="bottom">
+			<a href="{{path('back_positive_post',{'post':post.id})}}" class="toogle-opinion">
+				<img src="{{ asset('build/images/hand-thumbs-up-fill.svg')}}" alt="Positive" width="32" height="32">
+			</a>
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success num-positive-{{post.id}}">
+				{{ post.usersPositive.count}}
+			</span>
+		</button>
+
+	{% else %} 
+    {# quest #}
+		<button class="btn position-relative">
+			<a href="{{path('back_positive_post',{'post':post.id})}}" class="toogle-opinion">
+				<img src="{{ asset('build/images/hand-thumbs-down-fill.svg')}}" alt="Positive" width="32" height="32">
+			</a>
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger num-negative-{{post.id}}">
+				{{ post.usersNegative.count}}
+			</span>
+		</button>
+
+		<button class="btn position-relative">
+			<a href="{{path('back_positive_post',{'post':post.id})}}" class="toogle-opinion">
+				<img src="{{ asset('build/images/hand-thumbs-up-fill.svg')}}" alt="Negatyw" width="32" height="32">
+			</a>
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success num-positive-{{post.id}}">
+				{{ post.usersPositive.count}}
+			</span>
+		</button>
+	{% endif %}
+
+
+{% endblock %}

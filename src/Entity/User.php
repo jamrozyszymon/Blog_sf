@@ -54,9 +54,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $posts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Post::class, mappedBy="usersPositive")
+     * @ORM\JoinTable(name="OpinionPositive")
+     */
+    private $positiveOpinion;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Post::class, mappedBy="usersNegative")
+     * @ORM\JoinTable(name="OpinionNegative")
+     */
+    private $negativeOpinion;
+
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->postLikes = new ArrayCollection();
+        $this->opinionPositives = new ArrayCollection();
+        $this->positiveOpinion = new ArrayCollection();
+        $this->negativeOpinion = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,6 +191,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPositiveOpinion(): Collection
+    {
+        return $this->positiveOpinion;
+    }
+
+    public function addPositiveOpinion(Post $positiveOpinion): self
+    {
+        if (!$this->positiveOpinion->contains($positiveOpinion)) {
+            $this->positiveOpinion[] = $positiveOpinion;
+            $positiveOpinion->addUsersPositive($this);
+        }
+
+        return $this;
+    }
+
+    public function removePositiveOpinion(Post $positiveOpinion): self
+    {
+        if ($this->positiveOpinion->removeElement($positiveOpinion)) {
+            $positiveOpinion->removeUsersPositive($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getNegativeOpinion(): Collection
+    {
+        return $this->negativeOpinion;
+    }
+
+    public function addNegativeOpinion(Post $negativeOpinion): self
+    {
+        if (!$this->negativeOpinion->contains($negativeOpinion)) {
+            $this->negativeOpinion[] = $negativeOpinion;
+            $negativeOpinion->addUsersNegative($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNegativeOpinion(Post $negativeOpinion): self
+    {
+        if ($this->negativeOpinion->removeElement($negativeOpinion)) {
+            $negativeOpinion->removeUsersNegative($this);
+        }
+
+        return $this;
     }
 
 }
