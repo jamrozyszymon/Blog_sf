@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block body %}
+	{% block bodyheader %}
+		<h2>Stwórz nową kategorię</h2>
+
+		<div>
+			{% include 'displayerror.html.twig' %}
+		</div>
+	{% endblock %}
+
+	{% block bodycontent %}
+		<div class="card border border-info">
+			<div class="card-body">
+				<div class="card-text">
+					{{ form_start(form) }}
+					{{ form_row(form.name)}}
+					{{ form_row(form.description)}}
+
+					<button type="submit" class="btn btn-info">Dodaj</button>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+{% endblock %}

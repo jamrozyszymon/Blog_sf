@@ -40,13 +40,14 @@ class AdminController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $doctrine->getManager();
-            $category->setname($request->get('category')['name']);
+            $category->setName($request->get('category')['name']);
+            $category->setDescription($request->get('category')['description']);
             $entityManager->persist($category);
             $entityManager->flush();
-            return $this->redirectToRoute('ADMIN DASHBOARD');
+            return $this->redirectToRoute('category_display');
         }
 
-        return $this->render('Category/create.html.twig', [
+        return $this->render('admin/category_create.html.twig', [
             'form' =>$form->createView()
         ]);
     }

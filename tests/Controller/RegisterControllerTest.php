@@ -12,7 +12,7 @@ class RegisterControllerTest extends WebTestCase
         $client->request('GET', '/user/register');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Rejestracja');
+        $this->assertSelectorTextContains('body > main > div > div > article > h2', 'Rejestracja');
     }
 
 }

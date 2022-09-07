@@ -7,21 +7,22 @@ use App\Repository\UserRepository;
 
 class AdminControllerTest extends WebTestCase
 {
-    public function testAddCategoryRedirectToPath()
+    public function testAdminRedirectToPath()
     {
         $client = static::createClient();
-
         $userRepository = static::getContainer()->get(UserRepository::class);
-
-        // retrieve the test user
         $testUser = $userRepository->findOneByEmail('admin@admin.com');
-
-        // simulate $testUser being logged in
         $client->loginUser($testUser);
    
-        $client->request('GET', '/admin/category/create');
+        $crawler=$client->request('GET', '/admin');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Stwórz kategorię');
+
+        $text= $crawler->filter('article > h2')
+        ->getNode(0)
+        ->textContent;
+        
+        $this->assertSame('ADMIN DASHBOARD', $text);
+
     }
 
 }

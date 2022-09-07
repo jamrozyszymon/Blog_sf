@@ -47,6 +47,7 @@ class AdminControllerKernelTest extends KernelTestCase
     {
         $category = new Category();
         $category->setName('category testing');
+        $category->setDescription('category testing description');
         $this->entityManager->persist($category);
         $this->entityManager->flush();
 
@@ -54,6 +55,7 @@ class AdminControllerKernelTest extends KernelTestCase
         $categoryRecord = $categoryRepository->findOneBy(['name' => 'category testing']);
 
         $this->assertEquals('category testing', $categoryRecord->getName());
+        $this->assertEquals('category testing description', $categoryRecord->getDescription());
 
     }
  

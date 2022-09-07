@@ -23,7 +23,7 @@ class OpinionPostController extends AbstractController
     /**
      * @Route("/Post/{post}/positive", name="positive_post", methods={"POST"})
      * @Route("/Post/{post}/negative", name="negative_post", methods={"POST"})
-     * @Route("/Post{post}/backpositive", name="back_positive_post", methods={"POST"})
+     * @Route("/Post/{post}/backpositive", name="back_positive_post", methods={"POST"})
      * @Route("/Post/{post}/backnegative", name="back_negative_post", methods={"POST"})
      */
     public function toggleOpinion(Post $post, Request $request)

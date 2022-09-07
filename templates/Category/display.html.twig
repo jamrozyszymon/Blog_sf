@@ -1,9 +1,10 @@
 {% extends "base.html.twig" %}
 {% block body %}
-    <div>
+{% block bodyheader %}
+	<div>
         {% include 'displayerror.html.twig' %}
     </div>
-        {% if app.request.get('searchby')%} 
+    {% if app.request.get('searchby')%} 
             {% if categories is empty %}
                 <h2>Brak wyników dla: {{app.request.query.get('searchby')}}</h2>
             {% else %}
@@ -11,7 +12,17 @@
             {% endif %}
         {% else %}
             <h2> Wszystkie kategorie </h2>
-        {% endif %}
+    {% endif %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href={{path('admin_category_create')}}>
+        <button class="btn btn-info"> Stwórz kategorię</button>
+        </a>
+    {% endif %}
+
+{% endblock %}
+{% block bodycontent %}
+
             <table class="table">
                 <thead>
                     <tr>
@@ -52,4 +63,5 @@
         {{ knp_pagination_render(categories)}}
     </div>
 
+ {% endblock %}
  {% endblock %}

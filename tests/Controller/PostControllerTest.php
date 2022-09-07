@@ -20,10 +20,4 @@ class PostControllerTest extends WebTestCase
         $this->client->loginUser($testUser);
     }
 
-    public function testAddPostPath()
-    {
-        $crawler = $this-> client->request('GET', '/Post/create');
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Dodaj post');
-    }
 }

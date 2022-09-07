@@ -13,7 +13,7 @@ class LogInControllerTest extends WebTestCase
         $client->request('GET', '/user/login');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Zaloguj się');
+        $this->assertSelectorTextContains('body > main > div > div > article > h2', 'Zaloguj się');
     }
 
     public function testVisitingWhileLoggedIn()
@@ -30,7 +30,7 @@ class LogInControllerTest extends WebTestCase
 
         $client->request('GET', '/user/dashboard');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h2', 'Panel Użytkownika');
+        $this->assertSelectorTextContains('body > main > div > div > article > div > h2', 'Panel Użytkownika');
     }
 
     /**

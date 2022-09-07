@@ -1,46 +1,51 @@
 {% extends "base.html.twig" %}
- {% block body %}
+{% block body %}
+	{% block bodyheader %}
+		<h2>Lista użytkowników</h2>
 
-                <h1> Lista użytkowników </h1>
+		<div>
+			{% include 'displayerror.html.twig' %}
+		</div>
+	{% endblock %}
 
-                <div>
-                    {% include 'displayerror.html.twig' %}
-                </div>
+	{% block bodycontent %}
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col"></th>
+					<th scope="col">Login</th>
+					<th scope="col">E-mail</th>
+					<th scope="col">Zablokuj</th>
+					<th scope="col">Usuń</th>
+				</tr>
+			</thead>
+			<tbody class="table-group-divider">
+				{% for pagination in paginations %}
+					<tr>
+						<th scope="row"></th>
+						<td>
+							{{ pagination.name }}
+						</td>
+						<td>
+							{{ pagination.email }}
+						</td>
+						<td>
+							TODO
+						</td>
+						<td>
+							<a onclick="return confirm('Czy na pewno usunąć uzytkownika?')" href="{{ path('admin_user_delete',{'id':pagination.id})}}">
+								<span class="close">X</span>
+							</a>
+						</td>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col"> # </th>
-                        <th scope="col">Login</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Zablokuj</th>
-                        <th scope="col">Usuń</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    {% for pagination in paginations %}
-                    <tr>
-                    <th scope="row"></th>
-                        <td>
-                            {{ pagination.name }}
-                        </td>
-                        <td>
-                            {{ pagination.email }}
-                        </td>
-                        <td> 
-                            TODO
-                        </td>
-                        <td> 
-                            <a onclick="return confirm('Czy na pewno usunąć uzytkownika?')" href ="{{ path('admin_user_delete',{'id':pagination.id})}}"><span class="close">X</span></a>
-                        </td>
-                        
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 
-    <div class="navigation">
-        {{ knp_pagination_render(paginations)}}
-    </div>
+		<div class="navigation">
+			{{ knp_pagination_render(paginations)}}
+		</div>
 
- {% endblock %}
+	{% endblock %}
+{% endblock %}
