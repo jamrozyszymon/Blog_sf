@@ -19,4 +19,27 @@ class PostRepository extends EntityRepository
         ->getQuery();
         return $query->getResult();
     }
+
+    public function findLastPost()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+        SELECT psub.created, 
+        u.name user_name
+        FROM
+        (SELECT users_id, categories_id, created, RANK() OVER(PARTITION BY categories_id ORDER BY created DESC) post_date FROM post) psub 
+        JOIN user u 
+        ON psub.users_id=u.id
+        WHERE psub.post_date=1';
+        
+
+        $stmt = $conn->prepare($sql);
+        $resultSet= $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
+            
+    }
+
+
+
 }

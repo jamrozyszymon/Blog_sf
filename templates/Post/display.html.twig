@@ -15,34 +15,37 @@
 				<div align="avatar center">
 					{# TODO #}
 					{# <img class="img-fluid" src="{{ asset('build/images/' ~ user.getImagesFileName) }}"></img> #}<img class="img-fluid" src="{{ asset('build/images/avatar_1.png') }}"> </img>
+				</div>
+			</div>
+
+			<div class="card-content col-10">
+				<div class="date mt-1">
+					Opublikowano:
+					{{ post.getCreatedDate|date("m/d/Y H:i")}}
+					({{ post.getCreatedDate|ago }})
+
+					{# Delete post by admin#}
+					{% if is_granted('ROLE_ADMIN') %}
+
+						<a onclick="return confirm('Czy na pewno usunąć post?')" href="{{ path('post_delete',{'id':post.id})}}">
+							<button type="button" class="btn btn-danger">Usuń</button>
+						</a>
+
+					{% endif %}
+				</div>
+			
+				<div class="card-content-content my-1">
+					{{ post.content}}
+				</div>
+				<div class="card-content-opinion mb-1">
+					{% include 'Post/opinion.html.twig' %}
+				</div>
 			</div>
 		</div>
-
-		<div class="card-content col-10">
-			<div class="date mt-1">
-				Opublikowano
-				{{ post.getCreatedDate|date("m/d/Y H:i")}}
-
-				{# Delete post by admin#}
-				{% if is_granted('ROLE_ADMIN') %}
-
-					<a onclick="return confirm('Czy na pewno usunąć post?')" href="{{ path('post_delete',{'id':post.id})}}">
-						<button type="button" class="btn btn-danger">Usuń</button>
-					</a>
-
-				{% endif %}
-
-			</div>
-			<div class="card-content-content my-1">
-				{{ post.content}}
-			</div>
-			<div class="card-content-opinion mb-1">
-				{% include 'Post/opinion.html.twig' %}
-			</div>
-		</div>
-
 	</div>
-</div>{% endfor %}<div class="navigation">
+{% endfor %}
+
+<div class="navigation">
 {{ knp_pagination_render(posts)}}</div>{% if app.user %}
 <div class="card mt-2 border border-info">
 	<div class="row">

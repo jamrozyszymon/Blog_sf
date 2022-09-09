@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\DBAL\ParameterType;
 
 /**
  * @extends ServiceEntityRepository<Category>
@@ -41,29 +42,90 @@ class CategoryRepository extends ServiceEntityRepository
         }
     }
 
+    // * @param $page pagination
+    // * @param string $searchCategory Phrase from searching.
 
     /**
      * Find category by searching
-     * @param $page pagination
-     * @param string $searchCategory Phrase from searching.
      */
-    public function findCategory($page, string $searchCategory): PaginationInterface
+    // public function findCategory($page, string $searchCategory): PaginationInterface
+    // {
+    //     $searchCategoryExplode = explode(" ",$searchCategory);
+
+    //     $qb = $this->createQueryBuilder('c');
+
+    //         foreach($searchCategoryExplode as $key => $value) {
+    //             $qb->andWhere('c.name LIKE :val'.$key)
+    //             ->setParameter('val'.$key, '%'.$value.'%');
+    //         }
+
+    //     $qb->orderBy('c.name', 'ASC')
+    //         ->getQuery();
+
+    //     $pagination = $this->paginator->paginate($qb, $page, 12);
+    //     return $pagination;
+    // }
+
+    /**
+     * Find category by searching
+     */
+    public function findBySearch(string $searchCategory)
     {
         $searchCategoryExplode = explode(" ",$searchCategory);
-
-        $qb = $this->createQueryBuilder('c');
+        $conn = $this->getEntityManager()->getConnection();
 
             foreach($searchCategoryExplode as $key => $value) {
-                $qb->andWhere('c.name LIKE :val'.$key)
-                ->setParameter('val'.$key, '%'.$value.'%');
+              
+                $sql= "
+                SELECT psub.created, psub.sum_post,
+                        u.name user_name,
+                        c.id, c.name, c.description
+                        FROM
+                            (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY categories_id ORDER BY created DESC) post_date FROM post p
+                            JOIN 
+                                (SELECT RANK() OVER(ORDER BY COUNT(categories_id) DESC),categories_id, COUNT(*) sum_post FROM post GROUP BY categories_id) sub
+                            ON sub.categories_id=p.categories_id) psub 
+                    LEFT JOIN user u 
+                    ON psub.users_id=u.id
+                    LEFT JOIN category c
+                    ON psub.categories_id=c.id
+                    WHERE psub.post_date=1 AND c.name LIKE :val";
+
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(':val','%'.$value.'%', ParameterType::STRING);
             }
 
-        $qb->orderBy('c.name', 'ASC')
-            ->getQuery();
+        $resultSet= $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
 
-        $pagination = $this->paginator->paginate($qb, $page, 12);
-        return $pagination;
     }
+
+    public function findAllWithLastPost()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql='
+        SELECT psub.created, psub.sum_post,
+                u.name user_name,
+                c.id, c.name, c.description
+                FROM
+                    (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY categories_id ORDER BY created DESC) post_date FROM post p
+                    JOIN 
+                        (SELECT RANK() OVER(ORDER BY COUNT(categories_id) DESC),categories_id, COUNT(*) sum_post FROM post GROUP BY categories_id) sub
+                    ON sub.categories_id=p.categories_id) psub 
+            LEFT JOIN user u 
+            ON psub.users_id=u.id
+            LEFT JOIN category c
+            ON psub.categories_id=c.id
+            WHERE psub.post_date=1';
+
+        $stmt = $conn->prepare($sql);
+        $resultSet= $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
+            
+    }
+
 
 //    /**
 //     * @return Category[] Returns an array of Category objects

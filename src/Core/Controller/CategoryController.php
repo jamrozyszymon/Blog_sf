@@ -8,6 +8,7 @@ use App\Entity\Category;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CategoryController extends AbstractController
 {
@@ -26,20 +27,15 @@ class CategoryController extends AbstractController
     /**
      * @Route("/Category/display", name="category_display")
      */
-    public function showCategory(ManagerRegistry $doctrine, PaginatorInterface $paginator, Request $request)
+    public function showCategory(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request)
     {
-        $categories = $doctrine->getRepository(Category::class)->findAll();
-
+        $repository = $entityManager->getRepository(Category::class);
+        $listCategories=$repository->findAllWithLastPost();
         $category = $paginator->paginate(
-            $categories,
-            $request->query->getInt('page', 1), 5
+            $listCategories,
+            $request->query->getInt('page',1), 12
         );
 
-        if (!$categories) {
-            throw $this->createNotFoundException(
-                'Brak kategorii do wyświelenia.'
-            );
-        }
         return $this->render('Category/display.html.twig', [
             'categories' => $category
         ]);
@@ -48,10 +44,14 @@ class CategoryController extends AbstractController
     /**
      * @Route("/Category/display/{!page?1}", name="category_search_display")
      */
-    public function showSearchCategory(ManagerRegistry $doctrine, $page, Request $request)
+    public function showSearchCategory(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request)
     {
-        $category = $doctrine->getRepository(Category::class)
-            ->findCategory($page, $request->get('searchby'));
+        $repository = $entityManager->getRepository(Category::class);
+        $listCategories=$repository->findBySearch($request->get('searchby'));
+        $category = $paginator->paginate(
+            $listCategories,
+            $request->query->getInt('page',1), 12
+        );
 
         return $this->render('Category/display.html.twig', [
             'categories' => $category

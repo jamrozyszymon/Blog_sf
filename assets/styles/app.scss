@@ -1,6 +1,6 @@
 @import '~bootstrap/scss/bootstrap';
 
-$backgorun-color-main: rgb(77, 71, 160);
+$background-color-main: rgb(77, 71, 160);
 
 
 .navbar-brand {
@@ -17,28 +17,15 @@ $backgorun-color-main: rgb(77, 71, 160);
 
 //footer
 footer {
-    background-color: $backgorun-color-main;
+    background-color: $background-color-main;
     color: #fff;
     text-align: center;
     padding: 10px;
     width: 100%;
 }
 
-//table numbered
-.table-group-divider {
-    counter-reset: rowNumber;
-
-    th{
-        counter-increment: rowNumber;
-    }
-
-    th:first-child::before {
-        content: counter(rowNumber);     
-    }
-}
 
 //post display
-
 .card-user.col-2 {
     border-right: 1px solid lightgray;
 
