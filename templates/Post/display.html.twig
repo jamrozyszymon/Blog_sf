@@ -21,7 +21,7 @@
 			<div class="card-content col-10">
 				<div class="date mt-1">
 					Opublikowano:
-					{{ post.getCreatedDate|date("m/d/Y H:i")}}
+					{{ post.getCreatedDate|date("d/m/Y H:i")}}
 					({{ post.getCreatedDate|ago }})
 
 					{# Delete post by admin#}
@@ -46,7 +46,10 @@
 {% endfor %}
 
 <div class="navigation">
-{{ knp_pagination_render(posts)}}</div>{% if app.user %}
+	{{ knp_pagination_render(posts)}}
+</div>
+
+{% if app.user %}
 <div class="card mt-2 border border-info">
 	<div class="row">
 		<div

@@ -3,7 +3,6 @@
 namespace App\Tests\Services;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use App\Tests\DatabasePrimer;
 use App\Entity\User;
 
 class CreateUserTest extends KernelTestCase
@@ -13,15 +12,7 @@ class CreateUserTest extends KernelTestCase
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
-        DatabasePrimer::prime($kernel);
         $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->entityManager->close();
-        $this->entityManager = null;
     }
 
     public function testAUserCanBeAddedToDatabase()
@@ -42,6 +33,13 @@ class CreateUserTest extends KernelTestCase
         $this->assertEquals('test@test.com', $userRecord->getEmail());
         $this->assertEquals('123123123', $userRecord->getPassword());
         $this->assertEquals(['ROLE_USER'], $userRecord->getRoles());
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->entityManager->close();
+        $this->entityManager = null;
     }
     
 }

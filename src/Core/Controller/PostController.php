@@ -16,15 +16,17 @@ use App\Form\CreatePostType;
 class PostController extends AbstractController
 {
     /**
+     * Display posts for category (include posts od soft delete users)
      * @Route("/Post/display/category/{categoryname},{id}", name="post_display")
      */
     public function showPost(ManagerRegistry $doctrine,  PaginatorInterface $paginator, Request $request, Category $id, CreatePost $createPost)
     {
-        $posts = $doctrine->getRepository(Post::class)->findBy(['categories' => $id]);
-        
+
+        $posts = $doctrine->getRepository(Post::class)->findAllPostByID($id);
+       
         $paginate = $paginator->paginate(
             $posts,
-            $request->query->getInt('page', 1), 20
+            $request->query->getInt('page', 1), 5
         );
 
         //create post

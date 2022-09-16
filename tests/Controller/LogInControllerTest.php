@@ -28,9 +28,9 @@ class LogInControllerTest extends WebTestCase
         // simulate $testUser being logged in
         $client->loginUser($testUser);
 
-        $client->request('GET', '/user/dashboard');
+        $client->request('GET', '/profile/dashboard');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('body > main > div > div > article > div > h2', 'Panel Użytkownika');
+        $this->assertSelectorTextContains('body > main > div > div > article > div.body-header.mb-5 > h1', 'Panel Użytkownika');
     }
 
     /**
@@ -47,7 +47,7 @@ class LogInControllerTest extends WebTestCase
 
     public function getSecureUrl()
     {
-        yield ['/user/dashboard'];
+        yield ['/profile/dashboard'];
     }
 
 

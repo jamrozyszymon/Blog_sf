@@ -32,7 +32,7 @@ class CreateUser
         $user->setName($userValueObject->name);
         $user->setEmail($userValueObject->email);
         $passwordHashed = $this->userPasswordHasherInterface->hashPassword($user, $userValueObject->password);
-        $user->setRoles($userValueObject->roles ?? []);
+        $user->setRoles($userValueObject->roles ?? ['ROLE_USER']);
         $user->setPassword($passwordHashed);
         $this->entityManagerInterface->persist($user);
 

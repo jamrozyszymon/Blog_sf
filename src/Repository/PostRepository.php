@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use DateTime;
-use Doctrine\DBAL\Query\QueryBuilder;
+
 
 class PostRepository extends EntityRepository
 {
@@ -40,6 +40,18 @@ class PostRepository extends EntityRepository
             
     }
 
+    /**
+     * Return all posts (with posts of soft delete users)
+     * @param Category $id Id of category.
+     */
+    public function findAllPostById($id)
+    {
+        $em = $this->getEntityManager();
+        $em->getFilters()->disable('softdeleteable');
+        $query = $em->createQuery("SELECT p FROM App\Entity\Post p WHERE p.categories= :categories_id");
+        $query->setParameter('categories_id', $id);
 
+        return $query->getResult();
+    }
 
 }

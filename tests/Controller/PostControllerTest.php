@@ -37,7 +37,7 @@ class PostControllerTest extends WebTestCase
         ->textContent;
 
         $this->assertStringContainsString('admin', $userName);
-        $this->assertStringContainsString('07/12/2022 16:46', $createdAt);
+        $this->assertStringContainsString('12/07/2022 16:46', $createdAt);
         $this->assertStringContainsString('It is a long established fact ', $postContent);
 
     }
