@@ -42,9 +42,21 @@ class CategoryRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * Find category with at least 1 post.
+     */
+    public function findCategoryName()
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->join('c.posts', 'p')
+            ->getQuery()
+            ->execute();
+
+        return $qb;
+    }
+
     // * @param $page pagination
     // * @param string $searchCategory Phrase from searching.
-
     /**
      * Find category by searching
      */
@@ -71,12 +83,12 @@ class CategoryRepository extends ServiceEntityRepository
      */
     public function findBySearch(string $searchCategory)
     {
-        $searchCategoryExplode = explode(" ",$searchCategory);
+        $searchCategoryExplode = explode(" ", $searchCategory);
         $conn = $this->getEntityManager()->getConnection();
 
-            foreach($searchCategoryExplode as $key => $value) {
-              
-                $sql= "
+        foreach ($searchCategoryExplode as $key => $value) {
+
+            $sql = "
                 SELECT psub.created, psub.sum_post,
                         u.name user_name,
                         c.id, c.name, c.description
@@ -92,20 +104,19 @@ class CategoryRepository extends ServiceEntityRepository
                     WHERE psub.post_date=1 AND c.name LIKE :val";
 
 
-                $stmt = $conn->prepare($sql);
-                $stmt->bindValue(':val','%'.$value.'%', ParameterType::STRING);
-            }
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':val', '%' . $value . '%', ParameterType::STRING);
+        }
 
-        $resultSet= $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();
-
     }
 
     public function findAllWithLastPost()
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql='
+        $sql = '
         SELECT psub.created, psub.sum_post,
                 u.name user_name,
                 c.id, c.name, c.description
@@ -121,34 +132,33 @@ class CategoryRepository extends ServiceEntityRepository
             WHERE psub.post_date=1';
 
         $stmt = $conn->prepare($sql);
-        $resultSet= $stmt->executeQuery();
+        $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();
-            
     }
 
 
-//    /**
-//     * @return Category[] Returns an array of Category objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Category[] Returns an array of Category objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('c.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Category
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Category
+    //    {
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

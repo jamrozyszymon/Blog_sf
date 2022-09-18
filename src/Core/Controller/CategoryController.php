@@ -9,39 +9,66 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Cache\CacheInterface;
 
 class CategoryController extends AbstractController
 {
     /**
      * Display list of category in nav
      */
-    public function displayCategories(ManagerRegistry $doctrine)
+    public function displayCategories(EntityManagerInterface $entityManager, CacheInterface $cache)
     {
-        $categories = $doctrine->getRepository(Category::class)->findAll();
+        $cache = $cache->cache;
+        $categoriesList = $cache->getItem('categories_list_nav');
+        $categoriesList->expiresAfter(3600);
 
-        return $this->render('Category/category_tree.html.twig', [
-            'categories' => $categories,
-        ]);
+        if(!$categoriesList->isHit()) {
+            $repository = $entityManager->getRepository(Category::class);
+            $categories=$repository->findCategoryName();
+
+            $response = $this->render('Category/category_tree.html.twig', [
+                'categories' => $categories,
+            ]);
+
+            $categoriesList->set($response);
+            $cache->save($categoriesList);
+        }
+
+        return $categoriesList->get();
     }
 
+
     /**
+     * Display list of active categories with info about last post.
      * @Route("/Category/display", name="category_display")
      */
-    public function showCategory(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request)
+    public function showCategory(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request, CacheInterface $cache)
     {
-        $repository = $entityManager->getRepository(Category::class);
-        $listCategories=$repository->findAllWithLastPost();
-        $category = $paginator->paginate(
-            $listCategories,
-            $request->query->getInt('page',1), 12
-        );
+        $cache = $cache->cache;
+        $categoriesList = $cache->getItem('categories_list');
+        $categoriesList->expiresAfter(3600);
 
-        return $this->render('Category/display.html.twig', [
-            'categories' => $category
-        ]);
+        if(!$categoriesList->isHit()) {
+            $repository = $entityManager->getRepository(Category::class);
+            $listCategories=$repository->findAllWithLastPost();
+            $category = $paginator->paginate(
+                $listCategories,
+                $request->query->getInt('page',1), 12
+            );
+
+            $response =  $this->render('Category/display.html.twig', [
+                'categories' => $category
+            ]);
+
+            $categoriesList->set($response);
+            $cache->save($categoriesList);
+        }
+
+        return $categoriesList->get();
     }
 
     /**
+     * Display categories by search with info about last post.
      * @Route("/Category/display/{!page?1}", name="category_search_display")
      */
     public function showSearchCategory(EntityManagerInterface $entityManager, PaginatorInterface $paginator, Request $request)

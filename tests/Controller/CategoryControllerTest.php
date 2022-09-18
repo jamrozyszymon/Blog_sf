@@ -11,12 +11,19 @@ class CategoryControllerTest extends WebTestCase
     {
         parent::setUp();
         $this->client = static::createClient();
+
+        //cache clear
+        self::bootKernel();
+        $container = static::getContainer();
+        $cache = $container->get('App\Cache\CacheInterface');
+        $this-> cache = $cache->cache;
+        $this->cache->clear();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-
+        $this->cache->clear();
     }
 
     public function testCategoryListInNavDisplay()
@@ -31,7 +38,7 @@ class CategoryControllerTest extends WebTestCase
         ->count();
 
         $this->assertStringContainsString('Kategoria 1', $text);
-        $this->assertEquals(13,$amountCategory);
+        $this->assertEquals(2,$amountCategory);
     }
 
     public function testCategoryListDisplay()
