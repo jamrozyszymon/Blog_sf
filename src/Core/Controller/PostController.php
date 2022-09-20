@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Category;
 use App\Entity\Post;
 use App\Form\CreatePostType;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends AbstractController
 {
@@ -42,7 +43,7 @@ class PostController extends AbstractController
 
             return $this->redirect($request->getUri());
         }
-        
+
         return $this->render('Post/display.html.twig', [
             'posts' => $paginate,
             'form'=>$form->createView()

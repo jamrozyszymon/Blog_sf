@@ -14,6 +14,7 @@ import './bootstrap';
 import 'bootstrap';
 
 //JavaScript
-import './javascript/opinion.js';
+import './javascript/post_opinion.js';
+import './javascript/post_answer.js';
 
 

@@ -1,0 +1,14 @@
+{% if app.user %}
+	<div class="answer-form card mt-2 border border-info answer-post-id-{{post.id}}">
+		<div class="row">
+			<div class="col-2">
+				{# TODO #}
+				Dodaj załącznik
+			</div>
+			<div class="col-10 ">
+				<h5 class="my-2">Dodajesz odpowiedź</h>
+				{{ form_post }}
+			</div>
+		</div>
+	</div>
+{% endif %}

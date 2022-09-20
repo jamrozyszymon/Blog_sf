@@ -40,9 +40,15 @@ footer {
     .date.mt-1 {
         font-size: 15px;
     }
+
+    .card-content-content.my-1 {
+        min-height: 50%;
+    }
 }
 
-//opinion - hide all button at the beginning
+
+
+//post opinion - hide all button at the beginning
 .click-to-negative {
     display: none;
 }
@@ -53,5 +59,10 @@ footer {
     display: none;
 }
 .click-to-back-positive {
+    display: none;
+}
+
+//post answe - hide answer form at the beginning
+.answer-form {
     display: none;
 }

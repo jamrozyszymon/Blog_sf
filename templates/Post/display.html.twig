@@ -1,7 +1,16 @@
 {% extends "base.html.twig" %}
+
+{% set form_post %}
+	{{ form_start(form) }}
+	{{ form_widget(form.content)}}
+		<button type="submit" class="btn btn-info my-2">Dodaj</button>
+	{{ form_end(form) }}
+{% endset %}
+
 {% block bodyheader %}
 	<h1>
-		{{ app.request.get('categoryname')|capitalize|replace({'-': ' ',}) }}</h1>
+		{{ app.request.get('categoryname')|capitalize|replace({'-': ' ',}) }}
+	</h1>
 {% endblock %}
 {% block bodycontent %}
 
@@ -15,6 +24,10 @@
 				<div align="avatar center">
 					{# TODO #}
 					{# <img class="img-fluid" src="{{ asset('build/images/' ~ user.getImagesFileName) }}"></img> #}<img class="img-fluid" src="{{ asset('build/images/avatar_1.png') }}"> </img>
+				</div>
+				<div>
+					{# TODO User not acitve#}
+					&nbsp
 				</div>
 			</div>
 
@@ -37,11 +50,21 @@
 				<div class="card-content-content my-1">
 					{{ post.content}}
 				</div>
-				<div class="card-content-opinion mb-1">
-					{% include 'Post/opinion.html.twig' %}
+				<div class="row my-2">
+				{% if app.user %}
+					<div class="col-3">
+						<button class="btn btn-outline-info give-answer" id="{{post.id}}" type="button">Odpowiedz na to</button>
+					</div>
+				{% endif %}
+					<div class="card-content-opinion col-4">
+						{% include 'Post/opinion.html.twig' %}
+					</div>
 				</div>
 			</div>
 		</div>
+
+		{% include 'Post/answer.html.twig' %}
+
 	</div>
 {% endfor %}
 
@@ -49,20 +72,6 @@
 	{{ knp_pagination_render(posts)}}
 </div>
 
-{% if app.user %}
-<div class="card mt-2 border border-info">
-	<div class="row">
-		<div
-			class="col-2">
-			{# TODO #}
-			Dodaj załącznik
-		</div>
-		<div class="col-10">
-			{{ form_start(form) }}
-			<h5 class="my-2">Dodaj post</h>
-			{{ form_widget(form.content)}}
-			<button type="submit" class="btn btn-info my-2">Dodaj</button>
-			{{ form_end(form) }}
-		</div>
-	</div>
-</div>{% endif %}{% endblock %}
+{% include 'Post/add.html.twig' %}
+
+{% endblock %}
