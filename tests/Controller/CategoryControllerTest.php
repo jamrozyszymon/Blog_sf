@@ -75,7 +75,7 @@ class CategoryControllerTest extends WebTestCase
         $this->assertStringContainsString('Kategoria 1', $categoryName);
         $this->assertStringContainsString('Lorem Ipsum', $categoryDescription);
         $this->assertStringContainsString('5', $numPostInCategory);
-        $this->assertStringContainsString('user2', $authorName);
+        $this->assertStringContainsString('user4', $authorName);
     }
 
 

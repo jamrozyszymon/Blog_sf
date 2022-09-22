@@ -17,7 +17,9 @@ class RegisterController extends AbstractController
     */
     public function register(Request $request, RegisterUser $registerUser)
     {
-        if($request->isMethod('Post')) {
+        $submittedToken = $request->request->get('token');
+
+        if($this->isCsrfTokenValid('register-item', $submittedToken) && $request->isMethod('Post')) {
             try {
                 $registerUser->registerFromRequest($request);
                 $this->addFlash('success', 'Udana rejestracja. Teraz możesz zalogować się na swoje konto.');

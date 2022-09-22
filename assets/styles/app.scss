@@ -40,13 +40,7 @@ footer {
     .date.mt-1 {
         font-size: 15px;
     }
-
-    .card-content-content.my-1 {
-        min-height: 50%;
-    }
 }
-
-
 
 //post opinion - hide all button at the beginning
 .click-to-negative {
@@ -62,7 +56,12 @@ footer {
     display: none;
 }
 
-//post answe - hide answer form at the beginning
+//post answer
+.card.quote {
+    background-color: rgb(235, 235, 235);
+}
+//hide answer form at the beginning
 .answer-form {
     display: none;
 }
+

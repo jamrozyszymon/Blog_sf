@@ -12,7 +12,6 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Category;
 use App\Entity\Post;
 use App\Form\CreatePostType;
-use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends AbstractController
 {
@@ -39,7 +38,11 @@ class PostController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
 
-            $createPost->create($request->get('create_post')['content'], $user, $id);
+            $idFromForm = $request->get('create_post')['parentID'];
+            $entityManager = $doctrine->getManager();
+            $parentPost= $entityManager->getRepository(Post::class)->find($idFromForm);
+
+            $createPost->create($request->get('create_post')['content'], $parentPost, $user, $id);
 
             return $this->redirect($request->getUri());
         }

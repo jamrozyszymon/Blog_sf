@@ -3,6 +3,7 @@
 {% set form_post %}
 	{{ form_start(form) }}
 	{{ form_widget(form.content)}}
+	{{ form_widget(form.parentID, {attr: {value: 'NULL'}})}}
 		<button type="submit" class="btn btn-info my-2">Dodaj</button>
 	{{ form_end(form) }}
 {% endset %}
@@ -16,7 +17,7 @@
 
 {% for post in posts %}
 	<div class="card mb-2">
-		<div class="row">
+		<div class="row post">
 			<div class="card-user col-2">
 				<div class="name mb-1">
 					{{post.getUsers}}
@@ -46,6 +47,23 @@
 
 					{% endif %}
 				</div>
+				
+				{# quote #}
+				<div class="card quote m-2">
+				{% if post.getParent is not null %}
+					<div> 
+						Użytkownik 
+						<b>
+							{{ post.getParent.getUsers }}
+						</b>
+						 w dniu {{ post.getParent.getCreatedDate|date("d/m/Y H:i")}} napisał:
+						 <br></br>
+					</div>
+					<div>
+						{{post.getParent.content}}
+					</div>
+				{% endif %}
+				</div>
 			
 				<div class="card-content-content my-1">
 					{{ post.content}}
@@ -61,9 +79,11 @@
 					</div>
 				</div>
 			</div>
+		{% include 'Post/answer.html.twig' %}
+
+
 		</div>
 
-		{% include 'Post/answer.html.twig' %}
 
 	</div>
 {% endfor %}

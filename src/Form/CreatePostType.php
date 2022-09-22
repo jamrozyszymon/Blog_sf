@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class CreatePostType extends AbstractType
 {
@@ -14,7 +15,9 @@ class CreatePostType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class)
-        ;
+            ->add('parentID', HiddenType::class, [
+                'mapped'=>false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
