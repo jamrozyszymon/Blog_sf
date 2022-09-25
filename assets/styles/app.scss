@@ -15,6 +15,11 @@ $background-color-main: rgb(77, 71, 160);
     font-size: 20px;
 }
 
+//base
+article {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 //footer
 footer {
     background-color: $background-color-main;

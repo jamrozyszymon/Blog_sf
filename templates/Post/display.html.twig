@@ -8,90 +8,91 @@
 	{{ form_end(form) }}
 {% endset %}
 
-{% block bodyheader %}
-	<h1>
-		{{ app.request.get('categoryname')|capitalize|replace({'-': ' ',}) }}
-	</h1>
-{% endblock %}
-{% block bodycontent %}
+	{% block bodyheader %}
+		<h1>
+			{{ app.request.get('categoryname')|capitalize|replace({'-': ' ',}) }}
+		</h1>
+	{% endblock %}
 
-{% for post in posts %}
-	<div class="card mb-2">
-		<div class="row post">
-			<div class="card-user col-2">
-				<div class="name mb-1">
-					{{post.getUsers}}
-				</div>
-				<div align="avatar center">
-					{# TODO #}
-					{# <img class="img-fluid" src="{{ asset('build/images/' ~ user.getImagesFileName) }}"></img> #}<img class="img-fluid" src="{{ asset('build/images/avatar_1.png') }}"> </img>
-				</div>
-				<div>
-					{# TODO User not acitve#}
-					&nbsp
-				</div>
-			</div>
-
-			<div class="card-content col-10">
-				<div class="date mt-1">
-					Opublikowano:
-					{{ post.getCreatedDate|date("d/m/Y H:i")}}
-					({{ post.getCreatedDate|ago }})
-
-					{# Delete post by admin#}
-					{% if is_granted('ROLE_ADMIN') %}
-
-						<a onclick="return confirm('Czy na pewno usunąć post?')" href="{{ path('post_delete',{'id':post.id})}}">
-							<button type="button" class="btn btn-danger">Usuń</button>
-						</a>
-
-					{% endif %}
-				</div>
-				
-				{# quote #}
-				<div class="card quote m-2">
-				{% if post.getParent is not null %}
-					<div> 
-						Użytkownik 
-						<b>
-							{{ post.getParent.getUsers }}
-						</b>
-						 w dniu {{ post.getParent.getCreatedDate|date("d/m/Y H:i")}} napisał:
-						 <br></br>
+	{% block bodycontent %}
+	{% for post in posts %}
+		<div class="card mb-2">
+			<div class="row post p-2">
+				<div class="card-user col-xs-4 col-sm-2">
+					<div class="name mb-1 text-center">
+						{{post.getUsers}}
+					</div>
+					<div align="avatar center">
+						{# TODO #}
+						{# <img class="img-fluid" src="{{ asset('build/images/' ~ user.getImagesFileName) }}"></img> #}
+						<img class="img-fluid col-2 col-sm-12 my-auto" src="{{ asset('build/images/avatar_1.png') }}"> </img>
 					</div>
 					<div>
-						{{post.getParent.content}}
-					</div>
-				{% endif %}
-				</div>
-			
-				<div class="card-content-content my-1">
-					{{ post.content}}
-				</div>
-				<div class="row my-2">
-				{% if app.user %}
-					<div class="col-3">
-						<button class="btn btn-outline-info give-answer" id="{{post.id}}" type="button">Odpowiedz na to</button>
-					</div>
-				{% endif %}
-					<div class="card-content-opinion col-4">
-						{% include 'Post/opinion.html.twig' %}
+						{# TODO User not acitve#}
+						&nbsp
 					</div>
 				</div>
+
+				<div class="card-content col-xs-12 col-sm-10">
+					<div class="date mt-1">
+						Opublikowano:
+						{{ post.getCreatedDate|date("d/m/Y H:i")}}
+						({{ post.getCreatedDate|ago }})
+
+						{# Delete post by admin#}
+						{% if is_granted('ROLE_ADMIN') %}
+
+							<a onclick="return confirm('Czy na pewno usunąć post?')" href="{{ path('post_delete',{'id':post.id})}}">
+								<button type="button" class="btn btn-danger">Usuń</button>
+							</a>
+
+						{% endif %}
+					</div>
+					
+					{# quote #}
+					<div class="card quote m-2">
+					{% if post.getParent is not null %}
+						<div> 
+							Użytkownik 
+							<b>
+								{{ post.getParent.getUsers }}
+							</b>
+							w dniu {{ post.getParent.getCreatedDate|date("d/m/Y H:i")}} napisał:
+							<br></br>
+						</div>
+						<div>
+							{{post.getParent.content}}
+						</div>
+					{% endif %}
+					</div>
+				
+					<div class="card-content-content my-1">
+						{{ post.content}}
+					</div>
+					<div class="row mt-3">
+					{% if app.user %}
+						<div class="col-sm-6 col-md-5 col-lg-5 mb-3">
+							<button class="btn btn-outline-info give-answer" id="{{post.id}}" type="button">Odpowiedz na to</button>
+						</div>
+					{% endif %}
+						<div class="card-content-opinion col-sm-6">
+							{% include 'Post/opinion.html.twig' %}
+						</div>
+					</div>
+				</div>
+			{% include 'Post/answer.html.twig' %}
+
+
 			</div>
-		{% include 'Post/answer.html.twig' %}
 
 
 		</div>
+	{% endfor %}
 
-
+	<div class="navigation">
+		{{ knp_pagination_render(posts)}}
 	</div>
-{% endfor %}
 
-<div class="navigation">
-	{{ knp_pagination_render(posts)}}
-</div>
+	{% include 'Post/add.html.twig' %}
 
-{% include 'Post/add.html.twig' %}
-
-{% endblock %}
+	{% endblock %}

@@ -19,28 +19,28 @@
         </header>
 
         <main>
-            <div class="container mt-5">
+            <div class="container">
                 <div class="row">
-                    <nav class="col-sm-12 col-md-3 col-lg-2 mb-5">
+                    <nav class="col-sm-12 col-md-3 col-lg-2 my-5">
                         {% block nav %}
                             {{ render(controller("App\\Core\\Controller\\CategoryController::displayCategories")) }}
                         {% endblock %}
                     </nav>
 
-                    <article class="col-sm-12 col-md-9 col-lg-8 mb-5">
+                    <article class="col-sm-12 col-md-9 col-lg-8 pt-5">
                         {% block body %}
-                            <div class="body-header mb-5">
+                            <div class="body-header mb-5 border-bottom">
                                 {% block bodyheader %}
                                 {% endblock %}
                             </div>
-                            <div class="body-article">
+                            <div class="body-article pb-5">
                                 {% block bodycontent %}
                                 {% endblock %}
                             </div>
                         {% endblock %}
                     </article>
 
-                    <aside class="col-sm-12 col-md-12 col-lg-2 mb-5">
+                    <aside class="col-sm-12 col-md-12 col-lg-2 my-5">
                         {% block aside %}
                             {% include 'aside.html.twig' %}
                         {% endblock %}

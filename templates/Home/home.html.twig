@@ -1,17 +1,3 @@
-{% extends "base.html.twig" %}
- {% block body %}
-    <div class="container">
-        <h2>Strona startowa</h2>
-    </div>
-
-    <div>
-        <h3>Nie posiadasz konta</h3>
-        <a href= "{{path('register')}}">Zarejestruj się</a>
-    </div>
-
-    <div>
-        <h3>Masz konto?</h3>
-        <a href= "{{path('login')}}">Logowanie</a>
-    </div>
-
- {% endblock %}
+{% block body %}
+     {{ render(controller("App\\Core\\Controller\\CategoryController::showCategory")) }}
+{% endblock %}

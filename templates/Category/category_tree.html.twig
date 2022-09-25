@@ -1,7 +1,7 @@
 {% block nav %}       
 
 <form method="GET" role="search" action="{{path('category_search_display')}}">
-    <div class="input-group rounded mb-5">
+    <div class="input-group rounded mb-3">
         <input type="text" class="form-control" name="searchby" placeholder="Znajdź kategorię..." aria-label="Znajdź kategorię">
 
         <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
@@ -11,9 +11,12 @@
         </button>
     </div>
 </form>
-
-    <h2>Kategorie</h2>
-        <div class="list-group">
+    <div class="border-bottom">
+        <h2>
+            <a class="text-decoration-none text-dark" href={{path('category_display')}}>Kategorie</a>
+        </h2>
+    </div>
+        <div class="list-group mt-3 ">
             {% for category in categories %}
 
                 <a class="list-group-item list-group-item-action" href={{path('post_display', {'categoryname':category.name|lower|slug, 'id':category.id})}}>{{category.name}}</a>

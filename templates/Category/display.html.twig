@@ -1,16 +1,19 @@
-{% extends "base.html.twig" %}
-{% block body %}
+{% extends 'base.html.twig' %}
 	{% block bodyheader %}
 		<div>
 			{% include 'displayerror.html.twig' %}
 		</div>
 		{% if app.request.get('searchby')%}
 			{% if categories is empty %}
-				<h1>Brak wyników dla:
-					{{app.request.query.get('searchby')}}</h1>
+				<h1>
+					Brak wyników dla:
+					{{app.request.query.get('searchby')}}
+				</h1>
 			{% else %}
-				<h1>Wyniki wyszukiwania dla:
-					{{app.request.query.get('searchby')}}</h1>
+				<h1>
+					Wyniki wyszukiwania dla:
+					{{app.request.query.get('searchby')}}
+				</h1>
 			{% endif %}
 		{% else %}
 			<h1>
@@ -29,26 +32,25 @@
 
 	{% endblock %}
 	{% block bodycontent %}
-		<div class="container">
 		{% for category in categories %}
 	
 				<div class="card mb-2 p-2">
-					<div class="row">
-						<div class="card-title col-8 h3 ml-2">
+					<div class="row mb-2">
+						<div class="card-title col-sm-8 h3">
                         <a href ="{{path('post_display',{'categoryname':category.name|lower,'id':category.id })}}" class="text-reset text-decoration-none">
                             {{ category.name }}
                         </a>
 						</div>
-						<div class="cart-num-post col-4 mt-2">
+						<div class="cart-num-post col-sm-4 mt-2">
 							Liczba postów: <b>{{ category.sum_post}}</b>
 						</div>
 					</div>
 					<div class="row">
-						<div class="cart-content col-8 mb-2">
+						<div class="cart-content col-sm-12 col-md-8 mb-2">
 							{{ category.description }}
 						</div>
 
-						<div class="cart-info col-4">
+						<div class="cart-info col-sm-12 col-md-4">
 							Ostatni wpis: <b>{{ category.created|ago }}</b> 
                             </br>
                             przez:&nbsp {{ category.user_name}}
@@ -76,10 +78,7 @@
 				</div>
 			
 		{% endfor %}
-        </div>
 		<div class="navigation">
 			{{ knp_pagination_render(categories)}}
 		</div>
-
 	{% endblock %}
-{% endblock %}
