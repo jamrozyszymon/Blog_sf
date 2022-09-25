@@ -75,7 +75,7 @@ class OpinionPostControllerTest extends WebTestCase
         $client->request('POST', '/Post/14/backnegative');
         $crawler = $client->request('GET', '/Post/display/category/kategoria-1,1');
 
-        $text= $crawler->filter('.num-negative-14')
+        $text= $crawler->filter('.num-negative-8')
         ->getNode(0)
         ->textContent;
 

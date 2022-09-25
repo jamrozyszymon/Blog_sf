@@ -20,7 +20,7 @@ class CategoryController extends AbstractController
     {
         $cache = $cache->cache;
         $categoriesList = $cache->getItem('categories_list_nav');
-        $categoriesList->expiresAfter(5);
+        $categoriesList->expiresAfter(10);
 
         if(!$categoriesList->isHit()) {
             $repository = $entityManager->getRepository(Category::class);
@@ -35,6 +35,7 @@ class CategoryController extends AbstractController
         }
 
         return $categoriesList->get();
+
     }
 
 
@@ -46,7 +47,7 @@ class CategoryController extends AbstractController
     {
         $cache = $cache->cache;
         $categoriesList = $cache->getItem('categories_list');
-        $categoriesList->expiresAfter(5);
+        $categoriesList->expiresAfter(10);
 
         if(!$categoriesList->isHit()) {
             $repository = $entityManager->getRepository(Category::class);

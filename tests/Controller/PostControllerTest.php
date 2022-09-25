@@ -24,11 +24,11 @@ class PostControllerTest extends WebTestCase
         $client=static::createClient();
         $crawler = $client->request('GET', '/Post/display/category/kategoria-1,1');
         
-        $userName=$crawler->filter('div.card-user.col-2 > div.name.mb-1')
+        $userName=$crawler->filter('div.card-user.col-xs-4.col-sm-2 > div.name.mb-1.text-center')
         ->getNode(0)
         ->textContent;
 
-        $createdAt=$crawler->filter('div.card-content.col-10 > div.date.mt-1')
+        $createdAt=$crawler->filter('div.card-content.col-xs-12.col-sm-10 > div.date.mt-1')
         ->getNode(0)
         ->textContent;
 
