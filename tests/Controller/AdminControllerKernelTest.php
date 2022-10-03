@@ -14,24 +14,6 @@ class AdminControllerKernelTest extends KernelTestCase
      */
     private $entityManager;
 
-    protected function setUp(): void
-    {
-        $kernel = self::bootKernel();
-
-        $this->entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        // doing this is recommended to avoid memory leaks
-        $this->entityManager->close();
-        $this->entityManager = null;
-    }
-
     public function testSearchUserByName()
     {
         $user = $this->entityManager
@@ -43,6 +25,18 @@ class AdminControllerKernelTest extends KernelTestCase
     }
     
 
+    protected function setUp(): void
+    {
+        $kernel = self::bootKernel();
+
+        $this->entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+    }
+
+    /**
+     * @group database
+     */
     public function testCategoryCanBeCreatedInDatabase()
     {
         $category = new Category();
@@ -58,5 +52,15 @@ class AdminControllerKernelTest extends KernelTestCase
         $this->assertEquals('category testing description', $categoryRecord->getDescription());
 
     }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // doing this is recommended to avoid memory leaks
+        $this->entityManager->close();
+        $this->entityManager = null;
+    }
+
  
 }

@@ -47,4 +47,11 @@
         <extension class="Symfony\Component\Panther\ServerExtension" />
     </extensions>
     -->
+
+    <groups>
+        <exclude>
+            <group>database</group>
+        </exclude>
+    </groups>
+
 </phpunit>

@@ -1,0 +1,11 @@
+{
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_bootstrap_dist_js_boo-08e11b.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js-node_modules_bootstrap_dist_js_boo-08e11b.js",
+  "build/images/avatar_1.png": "/build/images/avatar_1.581e82ec.png",
+  "build/images/hand-thumbs-down.svg": "/build/images/hand-thumbs-down.0a6888f1.svg",
+  "build/images/hand-thumbs-down-fill.svg": "/build/images/hand-thumbs-down-fill.adb29cca.svg",
+  "build/images/hand-thumbs-up-fill.svg": "/build/images/hand-thumbs-up-fill.07517878.svg",
+  "build/images/chat-right-text.svg": "/build/images/chat-right-text.fcb11b97.svg"
+}

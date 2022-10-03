@@ -17,7 +17,7 @@
 			{% endif %}
 		{% else %}
 			<h1>
-				Aktywne kategorie
+				Wszystkie kategorie
 			</h1>
 		{% endif %}
 
@@ -32,52 +32,7 @@
 
 	{% endblock %}
 	{% block bodycontent %}
-		{% for category in categories %}
-	
-				<div class="card mb-2 p-2">
-					<div class="row mb-2">
-						<div class="card-title col-sm-8 h3">
-                        <a href ="{{path('post_display',{'categoryname':category.name|lower,'id':category.id })}}" class="text-reset text-decoration-none">
-                            {{ category.name }}
-                        </a>
-						</div>
-						<div class="cart-num-post col-sm-4 mt-2">
-							Liczba postów: <b>{{ category.sum_post}}</b>
-						</div>
-					</div>
-					<div class="row">
-						<div class="cart-content col-sm-12 col-md-8 mb-2">
-							{{ category.description }}
-						</div>
-
-						<div class="cart-info col-sm-12 col-md-4">
-							Ostatni wpis: <b>{{ category.created|ago }}</b> 
-                            </br>
-                            przez:&nbsp {{ category.user_name}}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-8">
-							{% if is_granted('ROLE_ADMIN') %}
-
-								ID Kategorii:
-								{{ category.id }}
-								<a onclick="return confirm('Czy na pewno usunąć kategorię?')" href="{{ path('admin_category_delete',{'id':category.id})}}">
-									<span class="close">
-										<button class="btn btn-danger">
-											Usuń</button>
-									</span>
-								</a>
-
-							{% endif %}
-						</div>
-						<div class="col-4">
-						
-						</div>
-					</div>
-				</div>
-			
-		{% endfor %}
+		{% include 'Category/display-content.html.twig' %}
 		<div class="navigation">
 			{{ knp_pagination_render(categories)}}
 		</div>

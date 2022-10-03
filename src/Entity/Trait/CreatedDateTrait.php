@@ -16,11 +16,23 @@ trait CreatedDateTrait
     private $created;
 
     /**
+     * With possibilities to override date in DoctrineFixtureBundle
      * @ORM\PrePersist
      */
     public function onPrePersist()
     {
+        if(isset($this->createdFixture)){
+            $this->created = $this->createdFixture;
+        } else {
         $this->created = new DateTime("now");
+        return $this;
+        }
+    }
+
+    public function onPrePersistFixture($created)
+    {
+        $this->createdFixture = $created;
+        return $this;
     }
 
     /**

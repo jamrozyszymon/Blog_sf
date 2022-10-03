@@ -28,6 +28,19 @@ class PostRepository extends EntityRepository
     }
 
     /**
+     * Return all posts (for Doctrine Fixture)
+     * @param Category $id Id of category.
+     */
+    public function findAllPostByIdFixture($id)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT p FROM App\Entity\Post p WHERE p.categories= :categories_id ORDER BY p.created ASC");
+
+        $query->setParameter('categories_id', $id);
+        return $query->getResult();
+    }
+
+    /**
      * Return all posts (with posts of soft delete users)
      * @param Category $id Id of category.
      */
@@ -35,7 +48,7 @@ class PostRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $em->getFilters()->disable('softdeleteable');
-        $query = $em->createQuery("SELECT p FROM App\Entity\Post p WHERE p.categories= :categories_id");
+        $query = $em->createQuery("SELECT p FROM App\Entity\Post p WHERE p.categories= :categories_id ORDER BY p.created ASC");
 
         $query->setParameter('categories_id', $id);
         return $query->getResult();

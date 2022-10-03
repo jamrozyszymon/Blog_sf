@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+	{% block bodyheader %}
+		<div>
+			{% include 'displayerror.html.twig' %}
+		</div>
+			<h1>
+				Ostatnio komentowane kategorie
+			</h1>
+	{% endblock %}
+	{% block bodycontent %}
+		{% include 'Category/display-content.html.twig' %}
+	{% endblock %}

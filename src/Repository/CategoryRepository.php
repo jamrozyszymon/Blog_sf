@@ -88,14 +88,31 @@ class CategoryRepository extends ServiceEntityRepository
 
         foreach ($searchCategoryExplode as $key => $value) {
 
+            //MySQL
+            // $sql = "
+            //     SELECT psub.created, psub.sum_post,
+            //             u.name user_name,
+            //             c.id, c.name, c.description
+            //             FROM
+            //                 (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY categories_id ORDER BY created DESC) post_date FROM post p
+            //                 JOIN 
+            //                     (SELECT RANK() OVER(ORDER BY COUNT(categories_id) DESC),categories_id, COUNT(*) sum_post FROM post GROUP BY categories_id) sub
+            //                 ON sub.categories_id=p.categories_id) psub 
+            //         LEFT JOIN user u 
+            //         ON psub.users_id=u.id
+            //         LEFT JOIN category c
+            //         ON psub.categories_id=c.id
+            //         WHERE psub.post_date=1 AND c.name LIKE :val";
+
+            //SQLite
             $sql = "
                 SELECT psub.created, psub.sum_post,
                         u.name user_name,
                         c.id, c.name, c.description
                         FROM
-                            (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY categories_id ORDER BY created DESC) post_date FROM post p
+                            (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY p.categories_id ORDER BY created DESC) post_date FROM post p
                             JOIN 
-                                (SELECT RANK() OVER(ORDER BY COUNT(categories_id) DESC),categories_id, COUNT(*) sum_post FROM post GROUP BY categories_id) sub
+                                (SELECT RANK() OVER(ORDER BY COUNT(po.categories_id) DESC), po.categories_id, COUNT(*) sum_post FROM post po GROUP BY po.categories_id) sub
                             ON sub.categories_id=p.categories_id) psub 
                     LEFT JOIN user u 
                     ON psub.users_id=u.id
@@ -116,26 +133,67 @@ class CategoryRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
 
+        //MySql
+        // $sql = '
+        // SELECT psub.created, psub.sum_post,
+        //         u.name user_name,
+        //         c.id, c.name, c.description
+        //         FROM
+        //             (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY categories_id ORDER BY created DESC) post_date FROM post p
+        //             JOIN 
+        //                 (SELECT RANK() OVER(ORDER BY COUNT(categories_id) DESC),categories_id, COUNT(*) sum_post FROM post GROUP BY categories_id) sub
+        //             ON sub.categories_id=p.categories_id) psub 
+        //     LEFT JOIN user u 
+        //     ON psub.users_id=u.id
+        //     LEFT JOIN category c
+        //     ON psub.categories_id=c.id
+        //     WHERE psub.post_date=1';
+
+        //SQLite
         $sql = '
-        SELECT psub.created, psub.sum_post,
-                u.name user_name,
-                c.id, c.name, c.description
-                FROM
-                    (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY categories_id ORDER BY created DESC) post_date FROM post p
-                    JOIN 
-                        (SELECT RANK() OVER(ORDER BY COUNT(categories_id) DESC),categories_id, COUNT(*) sum_post FROM post GROUP BY categories_id) sub
-                    ON sub.categories_id=p.categories_id) psub 
-            LEFT JOIN user u 
-            ON psub.users_id=u.id
-            LEFT JOIN category c
-            ON psub.categories_id=c.id
-            WHERE psub.post_date=1';
+            SELECT psub.created, psub.sum_post,
+                    u.name user_name,
+                    c.id, c.name, c.description
+                    FROM
+                        (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY p.categories_id ORDER BY created DESC) post_date FROM post p
+                        JOIN 
+                            (SELECT RANK() OVER(ORDER BY COUNT(po.categories_id) DESC), po.categories_id, COUNT(*) sum_post FROM post po GROUP BY po.categories_id) sub
+                        ON sub.categories_id=p.categories_id) psub 
+                LEFT JOIN user u 
+                ON psub.users_id=u.id
+                LEFT JOIN category c
+                ON psub.categories_id=c.id
+                WHERE psub.post_date=1';
 
         $stmt = $conn->prepare($sql);
         $resultSet = $stmt->executeQuery();
         return $resultSet->fetchAllAssociative();
     }
 
+    public function findTopWithLastPost()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        //SQLite
+        $sql = '
+            SELECT psub.created, psub.sum_post,
+                    u.name user_name,
+                    c.id, c.name, c.description
+                    FROM
+                        (SELECT sub.sum_post, users_id, p.categories_id, created, RANK() OVER(PARTITION BY p.categories_id ORDER BY created DESC) post_date FROM post p
+                        JOIN 
+                            (SELECT RANK() OVER(ORDER BY COUNT(po.categories_id) DESC), po.categories_id, COUNT(*) sum_post FROM post po GROUP BY po.categories_id) sub
+                        ON sub.categories_id=p.categories_id) psub 
+                LEFT JOIN user u 
+                ON psub.users_id=u.id
+                LEFT JOIN category c
+                ON psub.categories_id=c.id
+                WHERE psub.post_date=1
+                ORDER BY created DESC LIMIT 15';
+
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
+    }
 
     //    /**
     //     * @return Category[] Returns an array of Category objects

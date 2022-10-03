@@ -28,9 +28,9 @@ class CategoryControllerTest extends WebTestCase
 
     public function testCategoryListInNavDisplay()
     {
-        $crawler = $this->client->request('GET', '/Category/display');
+        $crawler = $this->client->request('GET', '/');
 
-        $text = $crawler->filter('body > main > div > div > nav > div > a:nth-child(1)')
+        $text = $crawler->filter('body > main > div > div > nav > div.list-group.mt-3 > a:nth-child(1)')
         ->getNode(0)
         ->textContent;
 
@@ -49,7 +49,7 @@ class CategoryControllerTest extends WebTestCase
         ->getNode(0)
         ->textContent;
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('Aktywne kategorie', $text);
+        $this->assertStringContainsString('Wszystkie kategorie', $text);
     }
 
     public function testCorrectDisplayUniqueCategory()

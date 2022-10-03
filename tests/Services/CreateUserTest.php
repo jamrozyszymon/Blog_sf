@@ -15,6 +15,9 @@ class CreateUserTest extends KernelTestCase
         $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
     }
 
+    /**
+     * @group database
+     */
     public function testAUserCanBeAddedToDatabase()
     {
         $user = new User();
@@ -41,5 +44,5 @@ class CreateUserTest extends KernelTestCase
         $this->entityManager->close();
         $this->entityManager = null;
     }
-    
+
 }
